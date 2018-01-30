@@ -1,16 +1,18 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+import {Container, Row, Col} from 'reactstrap';
+import PriceLadderContainer from "./components/PriceLadderContainer";
 import './App.css';
-import PriceLadders from './PriceLadders';
+import 'bootstrap/dist/css/bootstrap.css';
+import logo from './logo.svg';
 
-class App extends Component {
+export default class App extends Component {
     state = {
         response: ''
     };
 
     componentDidMount() {
         this.callApi()
-            .then(res => this.setState({ response: res.express }))
+            .then(res => this.setState({response: res.express}))
             .catch(err => console.log(err));
     }
 
@@ -26,15 +28,22 @@ class App extends Component {
     render() {
         return (
             <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <h1 className="App-title">Welcome to React</h1>
-                </header>
-                <p className="App-intro">{this.state.response}</p>
-                <PriceLadders/>
+                <Container fluid>
+                    <Row>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="btcusd"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="btcjpy"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="btcsgd"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="ethusd"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="ethjpy"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="ethsgd"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="ethbtc"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="qashjpy"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="qasheth"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="qashbtc"/></Col>
+                        <Col xs="12" lg="6" xl="4" className="my-3"><PriceLadderContainer product="qashusd"/></Col>
+                    </Row>
+                </Container>
             </div>
         );
     }
 }
-
-export default App;

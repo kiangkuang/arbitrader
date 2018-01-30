@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import Pusher from 'pusher-js';
-import { setPusherClient } from 'react-pusher';
+import {setPusherClient} from 'react-pusher';
 
 const pusher = new Pusher("2ff981bb060680b5ce97", {
     wsHost: "ws.pusherapp.com",
@@ -14,5 +14,5 @@ const pusher = new Pusher("2ff981bb060680b5ce97", {
 });
 setPusherClient(pusher);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
 registerServiceWorker();
