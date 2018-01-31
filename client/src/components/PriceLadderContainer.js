@@ -2,12 +2,30 @@ import React, {Component} from 'react';
 import Pusher from "react-pusher";
 import {Row, Col, Card, CardHeader, CardBody, CardSubtitle} from 'reactstrap';
 import PriceLadder from "./PriceLadder";
+import accounting from "accounting";
 
 export default class PriceLadderContainer extends Component {
     state = {
         buy: [],
         sell: []
     };
+
+    getAccumulatedAverage(data) {
+        for (var i = 0; i < data.length; i++) {
+            let partition = data.slice(0, i + 1);
+
+            let totalPrice = partition.reduce((curr, row) => {
+                return curr + accounting.parse(row[0]) * accounting.parse(row[1]);
+            }, 0);
+
+            let totalQuantity = partition.reduce((curr, row) => {
+                return curr + accounting.parse(row[1]);
+            }, 0);
+            
+            data[i].push(totalPrice / totalQuantity);
+        }
+        return data;
+    }
 
     render() {
         return (
@@ -18,11 +36,11 @@ export default class PriceLadderContainer extends Component {
                         <Row>
                             <Col>
                                 <CardSubtitle>Buy</CardSubtitle>
-                                <PriceLadder data={this.state.buy}/>
+                                <PriceLadder data={this.getAccumulatedAverage(this.state.buy)}/>
                             </Col>
                             <Col>
                                 <CardSubtitle>Sell</CardSubtitle>
-                                <PriceLadder data={this.state.sell}/>
+                                <PriceLadder data={this.getAccumulatedAverage(this.state.sell)}/>
                             </Col>
                         </Row>
                     </CardBody>

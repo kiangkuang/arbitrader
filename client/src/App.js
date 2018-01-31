@@ -3,7 +3,6 @@ import {Container, Row, Col} from 'reactstrap';
 import PriceLadderContainer from "./components/PriceLadderContainer";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import logo from './logo.svg';
 
 export default class App extends Component {
     state = {
