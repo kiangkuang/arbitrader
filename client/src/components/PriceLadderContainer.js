@@ -11,7 +11,7 @@ export default class PriceLadderContainer extends Component {
     };
 
     getAccumulatedAverage(data) {
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             let partition = data.slice(0, i + 1);
 
             let totalPrice = partition.reduce((curr, row) => {
@@ -21,8 +21,9 @@ export default class PriceLadderContainer extends Component {
             let totalQuantity = partition.reduce((curr, row) => {
                 return curr + accounting.parse(row[1]);
             }, 0);
-            
+
             data[i].push(totalPrice / totalQuantity);
+            data[i].push(totalQuantity);
         }
         return data;
     }

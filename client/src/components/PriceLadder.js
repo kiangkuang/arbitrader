@@ -11,12 +11,13 @@ export default class PriceLadder extends Component {
     render() {
         return (
             <div>
-                <Table size="sm" responsive bordered>
+                <Table size="sm" responsive bordered >
                     <thead>
                     <tr>
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Price<sub class="text-muted">AccAvg</sub></th>
+                        <th>Quantity<sub class="text-muted">Acc</sub></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -25,6 +26,7 @@ export default class PriceLadder extends Component {
                             <td>{accounting.toFixed(row[0], 5)}</td>
                             <td>{accounting.toFixed(row[1], 5)}</td>
                             <td>{accounting.toFixed(row[2], 5)}</td>
+                            <td>{accounting.toFixed(row[3], 5)}</td>
                         </tr>
                     )}
                     </tbody>
