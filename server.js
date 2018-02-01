@@ -1,17 +1,16 @@
-const express = require("express");
+const app = require("express")();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
 const arbitrager = require("./arbitrager");
 
-const app = express();
 const port = process.env.PORT || 5000;
-
-app.get("/api/hello", (req, res) => {
-    res.send({express: 'Hello From Express'});
-});
 
 app.get("/api/orderBook", (req, res) => {
     res.send(arbitrager.orderBook);
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}\n${Date()}`));
+arbitrager.onChange(() => {
+    io.emit('orderBook', arbitrager.orderBook);
+});
 
-console.log();
+server.listen(port, () => console.log(`Listening on port ${port}\n${Date()}`));

@@ -14,27 +14,33 @@ const products = [
     "qashjpy", "qasheth", "qashbtc", "qashusd"
 ];
 
-const orderBook = {
-    buy: {},
-    sell: {}
+const orderBook = {};
+products.forEach(product => {
+    orderBook[product] = {};
+});
+
+let _onChange = (product, type) => {
+};
+const onChange = callback => {
+    _onChange = callback;
 };
 
-function accumulateQuantity(data, count) {
+const accumulateQuantity = (data, count) => {
     return data.slice(0, count + 1)
         .reduce((sum, curr) => {
             let quantity = accounting.parse(curr[1]);
             return sum + quantity
         }, 0);
-}
+};
 
-function accumulateCost(data, count) {
+const accumulateCost = (data, count) => {
     return data.slice(0, count + 1)
         .reduce((sum, curr) => {
             let price = accounting.parse(curr[0]);
             let quantity = accounting.parse(curr[1]);
             return sum + price * quantity;
         }, 0)
-}
+};
 
 products.forEach(product => {
     ["buy", "sell"].forEach(type => {
@@ -45,17 +51,19 @@ products.forEach(product => {
                     let accCost = accumulateCost(data, i);
                     let accQuantity = accumulateQuantity(data, i);
                     orders.push({
-                        price: data[i][0],
-                        quantity: data[i][1],
+                        price: accounting.parse(data[i][0]),
+                        quantity: accounting.parse(data[i][1]),
                         accumulatePrice: accCost / accQuantity,
                         accumulateQuantity: accQuantity
                     });
                 }
-                orderBook[type][product] = orders;
+                orderBook[product][type] = orders;
+                _onChange(product, type);
             });
     });
 });
 
 module.exports = {
-    orderBook
+    orderBook,
+    onChange
 };

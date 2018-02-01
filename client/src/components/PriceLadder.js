@@ -1,7 +1,5 @@
 import React, {Component} from "react";
 import {Table} from 'reactstrap';
-import accounting from "accounting";
-
 
 export default class PriceLadder extends Component {
     static defaultProps = {
@@ -11,22 +9,22 @@ export default class PriceLadder extends Component {
     render() {
         return (
             <div>
-                <Table size="sm" responsive bordered >
+                <Table size="sm" responsive bordered>
                     <thead>
                     <tr>
                         <th>Price</th>
                         <th>Quantity</th>
-                        <th>Price<sub class="text-muted">AccAvg</sub></th>
-                        <th>Quantity<sub class="text-muted">Acc</sub></th>
+                        <th>Price<sub className="text-muted">AccAvg</sub></th>
+                        <th>Quantity<sub className="text-muted">Acc</sub></th>
                     </tr>
                     </thead>
                     <tbody>
-                    {this.props.data.slice(0, 5).map(row =>
-                        <tr key={row[0]}>
-                            <td>{accounting.toFixed(row[0], 5)}</td>
-                            <td>{accounting.toFixed(row[1], 5)}</td>
-                            <td>{accounting.toFixed(row[2], 5)}</td>
-                            <td>{accounting.toFixed(row[3], 5)}</td>
+                    {this.props.data.slice(0, 3).map(row =>
+                        <tr key={row.price}>
+                            <td>{Number(row.price.toPrecision(7))}</td>
+                            <td>{Number(row.quantity.toPrecision(7))}</td>
+                            <td>{Number(row.accumulatePrice.toPrecision(7))}</td>
+                            <td>{Number(row.accumulateQuantity.toPrecision(7))}</td>
                         </tr>
                     )}
                     </tbody>
