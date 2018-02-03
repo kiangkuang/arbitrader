@@ -10,7 +10,7 @@ export default class OrderBook extends Component {
                     <Col key={product} xs="12" lg="6" xl="4" className="my-3">
                         <PriceLadderContainer product={product} data={this.props.orderBook[product]}/>
                     </Col>
-                )};
+                )}
             </Row>
         )
     }

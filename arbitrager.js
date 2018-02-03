@@ -8,16 +8,38 @@ const pusher = new Pusher("2ff981bb060680b5ce97", {
     disabledTransports: ["flash"]
 });
 
-const products = [
-    "btcusd", "btcjpy", "btcsgd",
-    "ethusd", "ethjpy", "ethsgd", "ethbtc",
-    "qashjpy", "qasheth", "qashbtc", "qashusd"
-];
+const products = {
+    btcusd: 0.001,
+    btcjpy: 0.001,
+    btcsgd: 0.001,
+    ethusd: 0.01,
+    ethjpy: 0.01,
+    ethsgd: 0.01,
+    ethbtc: 0.01,
+    qashjpy: 1,
+    qasheth: 1,
+    qashbtc: 1,
+    qashusd: 1
+};
 
 const orderBook = {};
-products.forEach(product => {
-    orderBook[product] = {};
-});
+
+const getAllMinOrderPrices = () => {
+    const result = {};
+    Object.keys(orderBook).forEach(product => {
+        result[product] = {};
+        Object.keys(orderBook[product]).forEach(type => {
+            result[product][type] = getMinOrderPrice(product, type);
+        });
+    });
+    return result;
+};
+
+const getMinOrderPrice = (product, type) => {
+    return orderBook[product][type].find(row => {
+        return row.accumulateQuantity >= products[product];
+    }).accumulatePrice;
+};
 
 let _onChange = (product, type) => {
 };
@@ -42,7 +64,7 @@ const accumulateCost = (data, count) => {
         }, 0)
 };
 
-products.forEach(product => {
+Object.keys(products).forEach(product => {
     ["buy", "sell"].forEach(type => {
         pusher.subscribe(`price_ladders_cash_${product}_${type}`)
             .bind("updated", (data) => {
@@ -57,6 +79,10 @@ products.forEach(product => {
                         accumulateQuantity: accQuantity
                     });
                 }
+
+                if (orderBook[product] === undefined) {
+                    orderBook[product] = {};
+                }
                 orderBook[product][type] = orders;
                 _onChange(product, type);
             });
@@ -65,5 +91,6 @@ products.forEach(product => {
 
 module.exports = {
     orderBook,
+    getAllMinOrderPrices,
     onChange
 };

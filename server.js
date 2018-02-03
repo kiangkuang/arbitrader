@@ -9,6 +9,10 @@ app.get("/api/orderBook", (req, res) => {
     res.send(arbitrager.orderBook);
 });
 
+app.get("/api/getAllMinOrderPrices", (req, res) => {
+    res.send(arbitrager.getAllMinOrderPrices());
+});
+
 arbitrager.onChange(() => {
     io.emit('orderBook', arbitrager.orderBook);
 });
