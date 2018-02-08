@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Card, CardBody, CardHeader, CardSubtitle, Col, Row} from 'reactstrap';
-import PriceLadder from "./PriceLadder";
+import PriceTable from "./PriceTable";
 
-export default class PriceLadderContainer extends Component {
+export default class PriceTablesContainer extends Component {
     render() {
         return (
             <Card>
@@ -10,9 +10,9 @@ export default class PriceLadderContainer extends Component {
                 <CardBody>
                     <Row>
                         {Object.keys(this.props.data).sort().map(type =>
-                            <Col key={type}>
+                            <Col key={type} sm="6">
                                 <CardSubtitle className="text-muted">{type.toUpperCase()}</CardSubtitle>
-                                <PriceLadder data={this.props.data[type]}/>
+                                <PriceTable data={this.props.data[type]}/>
                             </Col>
                         )}
                     </Row>

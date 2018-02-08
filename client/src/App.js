@@ -7,13 +7,13 @@ import "./App.css";
 
 export default class App extends Component {
     state = {
-        orderBook: {}
+        markets: {}
     };
 
     componentDidMount() {
         const socket = io();
-        socket.on('orderBook', data => {
-            this.setState({orderBook: data});
+        socket.on('markets', data => {
+            this.setState({markets: data});
         });
     }
 
@@ -21,7 +21,8 @@ export default class App extends Component {
         return (
             <div className="App">
                 <Container fluid>
-                    <OrderBook orderBook={this.state.orderBook}/>
+                    <h1 className="display-4">Minimum Accumulated Orders</h1>
+                    <OrderBook orderBook={this.state.markets}/>
                 </Container>
             </div>
         );

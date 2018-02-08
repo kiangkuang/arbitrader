@@ -1,53 +1,59 @@
+const accounting = require("accounting");
+
 module.exports = class Market {
     constructor(curr1, curr2, minQuantity) {
         this.curr1 = curr1;
         this.curr2 = curr2;
         this.minQuantity = minQuantity;
         this.marketName = curr1 + curr2;
-        this.buy = [];
-        this.sell = [];
+        this.orders = {
+            buy: [],
+            sell: []
+        };
     }
 
-    get accumulateBuy() {
-        return this.accumulate("buy");
+    get accumulateOrders() {
+        return {
+            buy: this.accumulate("buy"),
+            sell: this.accumulate("sell")
+        };
     }
 
-    get accumulateSell() {
-        return this.accumulate("sell");
+    get minOrders() {
+        return {
+            buy: this.minOrder("buy"),
+            sell: this.minOrder("sell")
+        };
     }
 
     accumulate(type) {
         const result = [];
-        for (let i = 0; i < this[type].length; i++) {
-            const item = this[type].slice(0, i + 1).reduce((previous, current) => {
-                const totalCost = previous.price * previous.quantity + current.price * current.quantity;
-                const quantity = previous.quantity + current.quantity;
+        for (let i = 0; i < this.orders[type].length; i++) {
+            const item = this.orders[type].slice(0, i + 1).reduce((previous, current) => {
+                const currentPrice = accounting.parse(current[0]);
+                const currentQuantity = accounting.parse(current[1]);
+                const totalCost = previous.price * previous.quantity + currentPrice * currentQuantity;
+                const quantity = previous.quantity + currentQuantity;
                 const price = totalCost / quantity;
                 return {
                     price,
                     quantity
                 }
+            }, {
+                price: 0,
+                quantity: 0
             });
 
             result.push(item);
 
             if (item.quantity >= this.minQuantity) {
-                break
+                return result;
             }
         }
         return result;
     }
 
-    get minOrderBuy() {
-        return this.minOrder("buy");
-    }
-
-    get minOrderSell() {
-        return this.minOrder("sell");
-    }
-
     minOrder(type) {
-        type = type.charAt(0).toUpperCase() + type.slice(1);
-        return this["accumulate" + type][this["accumulate" + type].length - 1];
+        return this.accumulateOrders[type][this.accumulateOrders[type].length - 1];
     }
 };
