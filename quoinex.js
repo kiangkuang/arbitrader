@@ -17,19 +17,11 @@ module.exports = class Quoinex {
             ["buy", "sell"].forEach(type => {
                 pusher.subscribe(`price_ladders_cash_${market}_${type}`)
                     .bind("updated", (data) => {
-                        markets[market].orders[type] = data;
+                        this.markets[market].updateOrders(type, data);
                         this._onChange();
                     });
             });
         });
-    }
-
-    get minOrders() {
-        const result = {};
-        Object.keys(this.markets).forEach(market => {
-            result[market] = this.markets[market].minOrders;
-        });
-        return result;
     }
 
     onChange(callback) {

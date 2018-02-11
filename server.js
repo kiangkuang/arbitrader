@@ -22,15 +22,11 @@ const markets = {
 
 const quoinex = new Quoinex(markets);
 quoinex.onChange(() => {
-    io.emit("markets", quoinex.minOrders);
+    io.emit("markets", markets);
 });
 
 app.get("/api/markets", (req, res) => {
-    res.send(quoinex.markets);
-});
-
-app.get("/api/minOrders", (req, res) => {
-    res.send(quoinex.minOrders);
+    res.send(markets);
 });
 
 server.listen(port, () => console.log(`Listening on port ${port}\n${Date()}`));

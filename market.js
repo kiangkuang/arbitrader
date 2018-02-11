@@ -10,30 +10,33 @@ module.exports = class Market {
             buy: [],
             sell: []
         };
-    }
-
-    get accumulateOrders() {
-        return {
-            buy: this.accumulate("buy"),
-            sell: this.accumulate("sell")
+        this.minOrders = {
+            buy: {},
+            sell: {}
         };
     }
 
-    get minOrders() {
-        return {
-            buy: this.minOrder("buy"),
-            sell: this.minOrder("sell")
-        };
+    updateOrders(type, orders) {
+        this.orders[type] = orders.map(order => {
+            return {
+                price: accounting.parse(order[0]),
+                quantity: accounting.parse(order[1])
+            }
+        });
+        this.minOrders[type] = this.getMinOrder(type);
+    };
+
+    getMinOrder(type) {
+        const accumulateOrder = this.getAccumulate(type);
+        return accumulateOrder[accumulateOrder.length - 1];
     }
 
-    accumulate(type) {
+    getAccumulate(type) {
         const result = [];
         for (let i = 0; i < this.orders[type].length; i++) {
             const item = this.orders[type].slice(0, i + 1).reduce((previous, current) => {
-                const currentPrice = accounting.parse(current[0]);
-                const currentQuantity = accounting.parse(current[1]);
-                const totalCost = previous.price * previous.quantity + currentPrice * currentQuantity;
-                const quantity = previous.quantity + currentQuantity;
+                const totalCost = previous.price * previous.quantity + current.price * current.quantity;
+                const quantity = previous.quantity + current.quantity;
                 const price = totalCost / quantity;
                 return {
                     price,
@@ -51,9 +54,5 @@ module.exports = class Market {
             }
         }
         return result;
-    }
-
-    minOrder(type) {
-        return this.accumulateOrders[type][this.accumulateOrders[type].length - 1];
     }
 };

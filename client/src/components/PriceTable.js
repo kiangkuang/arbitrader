@@ -17,8 +17,8 @@ export default class PriceTable extends Component {
                 </thead>
                 <tbody>
                 <tr>
-                    <td>{Number(this.props.data.price.toPrecision(7))}</td>
-                    <td>{Number(this.props.data.quantity.toPrecision(7))}</td>
+                    <td>{Number((this.props.data.price !== undefined ? this.props.data.price : 0).toPrecision(7))}</td>
+                    <td>{Number((this.props.data.quantity !== undefined ? this.props.data.quantity : 0).toPrecision(7))}</td>
                 </tr>
                 </tbody>
             </Table>

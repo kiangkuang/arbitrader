@@ -9,10 +9,10 @@ export default class PriceTablesContainer extends Component {
                 <CardHeader>{this.props.product.toUpperCase()}</CardHeader>
                 <CardBody>
                     <Row>
-                        {Object.keys(this.props.data).sort().map(type =>
+                        {Object.keys(this.props.data.minOrders).sort().map(type =>
                             <Col key={type} sm="6">
                                 <CardSubtitle className="text-muted">{type.toUpperCase()}</CardSubtitle>
-                                <PriceTable data={this.props.data[type]}/>
+                                <PriceTable data={this.props.data.minOrders[type]}/>
                             </Col>
                         )}
                     </Row>
